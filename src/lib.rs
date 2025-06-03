@@ -12,6 +12,7 @@
 //! 2. Blog trait for impl blog create, read, update and delete methods
 //!     1. default impl 
 //!     2. Blog handles Category, and Category handles Post
+mod vector_stores;
 
 /// A placeholder function for the vertices library
 pub fn hello() -> String {
