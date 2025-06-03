@@ -9,3 +9,4 @@ repository = "https://github.com/aspadax/vertices"
 license = "MIT"
 
 [dependencies]
+anyhow = "1.0.98"
