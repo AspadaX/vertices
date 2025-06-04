@@ -13,6 +13,9 @@
 //!     1. default impl 
 //!     2. Blog handles Category, and Category handles Post
 mod vector_stores;
+mod text_chunking;
+mod document;
+mod commons;
 
 /// A placeholder function for the vertices library
 pub fn hello() -> String {
