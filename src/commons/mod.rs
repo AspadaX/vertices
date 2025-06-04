@@ -6,7 +6,7 @@ mod enums;
 
 use anyhow::Result;
 
-use crate::{commons::{enums::Distance, models::{CollectionInformation, VectorSearchResult, VectorStoreDeletionResult, VectorStoreEntry, VectorStoreEntryUpdateResult, VectorizationResult}}, document::Document};
+use crate::{commons::{enums::Distance, models::{CollectionInformation, VectorSearchResult, OperationStatus, VectorStoreEntry, VectorizationResult}}, document::Document};
 
 /// Provide vectorization implementations
 pub trait Vectorizations {
@@ -24,22 +24,25 @@ pub trait CollectionsManagements {
 
 /// Provide basic CRUD operations for entries in a `vertices` collection. 
 /// This allows `vertices` to perform higher level operations. 
-pub trait BasicOperations {
+pub trait VectorStoreCollectionOperations {
     async fn read_entries(&self, query: &str, document_id: Option<&str>) -> Result<Vec<VectorSearchResult>>;
 
-    async fn delete_entry(&mut self, id: &str) -> Result<VectorStoreDeletionResult>;
+    async fn delete_entry(&mut self, id: &str) -> Result<OperationStatus>;
 
-    async fn create_entry(&mut self, entry: VectorStoreEntry) -> Result<VectorStoreEntryUpdateResult>;
+    async fn create_entry(&mut self, entry: VectorStoreEntry) -> Result<OperationStatus>;
 
-    async fn update_entry(&mut self, entry: VectorStoreEntry) -> Result<VectorStoreEntryUpdateResult>;
+    async fn update_entry(&mut self, entry: VectorStoreEntry) -> Result<OperationStatus>;
 }
 
+/// An abstract layer upon the vector store collections operations
 pub trait DocumentOperations {
     async fn get_document(&self, collection_name: &str, document_id: Option<&str>) -> Result<Vec<Document>>;
+    
+    async fn search_document_chunks(&self, collection_name: &str, document_id: Option<&str>) -> Result<Vec<VectorSearchResult>>;
 
-    async fn delete_document(&mut self, collection_name: &str, document_id: &str) -> Result<VectorStoreDeletionResult>;
+    async fn delete_document(&mut self, collection_name: &str, document_id: &str) -> Result<OperationStatus>;
 
-    async fn create_document(&mut self, collection_name: &str, document: Document) -> Result<VectorStoreEntryUpdateResult>;
+    async fn create_document(&mut self, collection_name: &str, document: Document) -> Result<OperationStatus>;
 
-    async fn update_document(&mut self, collection_name: &str, document_id: &str, document: Document) -> Result<VectorStoreEntryUpdateResult>;
+    async fn update_document(&mut self, collection_name: &str, document_id: &str, document: Document) -> Result<OperationStatus>;
 }
